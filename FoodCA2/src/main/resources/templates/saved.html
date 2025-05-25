@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- ----------------------------------- -->
+
+<div th:replace="fragments/header :: header"></div>
+
+<!-- ----------------------------------- -->
+
+<head>
+    <title>Saved Recipes</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/main.css}" />
+</head>
+<body>
+<h1>My Saved Recipes</h1>
+
+
+<div th:if="${recipes.isEmpty()}">
+    <p>No saved recipes yet.</p>
+</div>
+
+<ul th:if="${!recipes.isEmpty()}">
+    <li th:each="recipe : ${recipes}">
+        <img th:src="${recipe.image}" width="100" alt="Recipe image"/><br>
+        <strong th:text="${recipe.title}"></strong><br>
+
+        <span><b>Calories:</b> <span th:text="${recipe.calories}"></span></span><br>
+        <span><b>Protein:</b> <span th:text="${recipe.protein} + 'g'"></span></span><br>
+        <span><b>Fat:</b> <span th:text="${recipe.fat} + 'g'"></span></span><br>
+        <span><b>Carbs:</b> <span th:text="${recipe.carbohydrates} + 'g'"></span></span><br>
+        <h3>Instructions</h3>
+        <div th:utext="${recipe.instructions}">No instructions available.</div>
+
+
+        <p><strong>Ingredientes:</strong></p>
+        <ul>
+            <li th:each="ingredient : ${recipe.ingredients}" th:text="${ingredient}"></li>
+        </ul>
+        <form th:action="@{/deleteRecipe}" method="post" style="margin-top: 10px;">
+            <input type="hidden" name="id" th:value="${recipe.id}" />
+            <button type="submit" onclick="return confirm('Are you sure you want to delete this recipe?')">Delete</button>
+        </form>
+
+    </li>
+</ul>
+
+
+<a href="/search">Back to Search</a>
+</body>
+</html>
